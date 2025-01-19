@@ -99,8 +99,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     return {
       content: [
         {
-          type: `text`,
-          text: await workingDir.generateResourceTable(),
+          type: `resource`,
+          resource: {
+            uri: `/available-files`,
+            mimeType: `text/markdown`,
+            text: await workingDir.generateResourceTable(),
+          },
         },
       ],
     };

@@ -2,7 +2,7 @@ import { Dirent, promises as fs } from "fs";
 import path from "path";
 import mime from "mime";
 import { pathToFileURL } from "url";
-import { FALLBACK_MIME_TYPE } from "./mime_types.js";
+import { FALLBACK_MIME_TYPE, treatAsText } from "./mime_types.js";
 import { claudeSupportedMimeTypes } from "./mime_types.js";
 
 export interface ResourceFile {
@@ -64,7 +64,6 @@ export class WorkingDirectory {
     return pathToFileURL(path.resolve(this.directory, filename)).href;
   }
 
-  // Rename isSupported to isSupportedFile for clarity
   async isSupportedFile(filename: string): Promise<boolean> {
     if (!this.claudeDesktopMode) return true;
 
@@ -74,7 +73,7 @@ export class WorkingDirectory {
 
       const mimetype = mime.getType(filename);
       if (!mimetype) return false;
-
+      if(treatAsText(mimetype)) return true;
       return claudeSupportedMimeTypes.some((supported) => {
         if (!supported.includes("/*")) return supported === mimetype;
         const supportedMainType = supported.split("/")[0];

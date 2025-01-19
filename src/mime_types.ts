@@ -40,5 +40,6 @@ export const FALLBACK_MIME_TYPE='application/octet-stream';
 export function treatAsText(mimetype: string){
     if(mimetype.startsWith('text/')) return true;
     if(textBasedMimeTypes.includes(mimetype as any)) return true;
+    if(mimetype.indexOf('vnd.openxmlformats') > 0) return true;
     return false;
 }
