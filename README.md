@@ -8,21 +8,25 @@ By default, it connects to `evalstate/FLUX.1-schnell` providing Image Generation
 
 ![Default Setup](./images/2024-12-09-flower.png)
 
-<a href="https://glama.ai/mcp/servers/s57c80wvgq"><img width="380" height="200" src="https://glama.ai/mcp/servers/s57c80wvgq/badge" alt="mcp-hfspace MCP server" /></a>
-
 ## Installation
 
-Recommend installation is using either mcp-get.
+NPM Package is `@llmindset/mcp-hfspsace`.
 
-### Using mcp-get
+Install a recent version of [NodeJS](https://nodejs.org/en/download) for your platform, then add the following to the `mcpServers` section of your `claude_desktop_config.json` file:
 
-You can install this package using mcp-get:
-
-```bash
-npx @michaellatman/mcp-get@latest install @llmindset/mcp-hfspace
+```
+    "mcp=hfspace": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@llmindset/mcp-hfspace"
+      ]
+    }
 ```
 
-_Note - if you are using an old version of Windows PowerShell, you may need to run_ `Set-ExecutionPolicy Bypass -Scope Process` _before this command._
+Please make sure you are using Claude Desktop 0.78 or greater.
+
+This will get you started with an Image Generator.
 
 ### Basic setup
 
@@ -31,6 +35,23 @@ Supply a list of HuggingFace spaces in the arguments. mcp-hfspace will find the 
 By default the current working directory is used for file upload/download. On Windows this is a read/write folder at `\users\<username>\AppData\Roaming\Claude\<version.number\`, and on MacOS it is the is the read-only root: `/`.
 
 It is recommended to override this and set a Working Directory for handling the upload and download of images and other file-based content. Specify either the `--work-dir=/your_directory` argument or `MCP_HF_WORK_DIR` environment variable.
+
+An example configuration for using a modern image generator, vision model and text to speech is below with a working directory set is below:
+
+```
+    "mcp-hfspace": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@llmindset/mcp-hfspace",
+        "--work-dir=/Users/evalstate/mcp-store",
+        "shuttleai/shuttle-jaguar",
+        "styletts2/styletts2",
+        "Qwen/QVQ-72B-preview"
+      ]
+    }
+```
+
 
 To use private spaces, supply your Hugging Face Token with either the  `--hf-token=hf_...` argument or `HF_TOKEN` environment variable.
 
@@ -191,3 +212,7 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 - If ZeroGPU quotas or queues are too long, try duplicating the space. If your job takes less than sixty seconds, you can usually change the function decorator `@spaces.GPU(duration=20)` in `app.py` to request less quota when running the job.
 - If you have a HuggingFace Pro account, please note that The Gradio API does not your additional quote for ZeroGPU jobs - you will need to set an `X-IP-Token` header to achieve that.
 - If you have a private space, and dedicated hardware your HF_TOKEN will give you direct access to that - no quota's apply. I recommend this if you are using for any kind of Production task.
+
+## Third Party MCP Services
+
+<a href="https://glama.ai/mcp/servers/s57c80wvgq"><img width="380" height="200" src="https://glama.ai/mcp/servers/s57c80wvgq/badge" alt="mcp-hfspace MCP server" /></a>
