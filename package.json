@@ -1,6 +1,6 @@
 {
   "name": "@llmindset/mcp-hfspace",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "MCP Server to connect to Hugging Face spaces. Simple configuration, Claude Desktop friendly.",
   "type": "module",
   "publishConfig": {
@@ -19,10 +19,20 @@
   "bugs": {
     "url": "https://github.com/evalstate/mcp-hfspace/issues"
   },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
   "scripts": {
+    "clean": "rimraf build",
     "prebuild": "node scripts/generate-version.js",
-    "build": "tsc",
-    "prepare": "npm run build",
+    "build": "npm run lint:fix && npm run format:fix && npm run clean && npm run prebuild && tsc",
+    "prepack": "npm run build",
+    "lint": "eslint src/**/*.ts --max-warnings 0",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:fix": "prettier --write \"src/**/*.ts\"",
+    "validate": "eslint src/**/*.ts && prettier --check \"src/**/*.ts\"",
     "watch": "tsc --watch",
     "inspector": "npx @modelcontextprotocol/inspector build/index.js",
     "test": "vitest",
@@ -36,9 +46,17 @@
     "minimist": "^1.2.8"
   },
   "devDependencies": {
+    "@eslint/js": "9.19.0",
     "@types/minimist": "^1.2.5",
     "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "9.19.0",
+    "globals": "15.14.0",
+    "prettier": "latest",
+    "rimraf": "^5.0.1",
     "typescript": "^5.3.3",
+    "typescript-eslint": "8.21.0",
     "vitest": "^2.1.8"
   }
 }

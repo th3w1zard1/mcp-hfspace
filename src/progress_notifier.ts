@@ -2,26 +2,27 @@ import { Status } from "@gradio/client";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import type { ProgressNotification } from "@modelcontextprotocol/sdk/types.js";
 
-
 export interface ProgressNotifier {
   notify(status: Status, progressToken: string | number): Promise<void>;
 }
 
 export function createProgressNotifier(server: Server): ProgressNotifier {
-
   let lastProgress = 0;
 
   function createNotification(
     status: Status,
-    progressToken: string | number
+    progressToken: string | number,
   ): ProgressNotification {
-
     let progress = lastProgress;
     const total = 100;
 
     if (status.progress_data?.length) {
       const item = status.progress_data[0];
-      if (item && typeof item.index === "number" && typeof item.length === "number") {
+      if (
+        item &&
+        typeof item.index === "number" &&
+        typeof item.length === "number"
+      ) {
         const stepProgress = (item.index / (item.length - 1)) * 80;
         progress = Math.round(10 + stepProgress);
       }
@@ -70,7 +71,7 @@ export function createProgressNotifier(server: Server): ProgressNotifier {
         progress,
         total,
         message,
-        _meta: status
+        _meta: status,
       },
     };
   }
@@ -80,6 +81,6 @@ export function createProgressNotifier(server: Server): ProgressNotifier {
       if (!progressToken) return;
       const notification = createNotification(status, progressToken);
       await server.notification(notification);
-    }
+    },
   };
 }

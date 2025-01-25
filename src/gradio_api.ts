@@ -3,14 +3,14 @@ export interface ApiParameter {
   label: string;
   parameter_name?: string; // Now optional
   parameter_has_default?: boolean;
-  parameter_default?: any;
+  parameter_default?: unknown;
   type: string;
   python_type: {
     type: string;
     description?: string;
   };
   component: string;
-  example_input?: any;
+  example_input?: string;
   description?: string;
 }
 export interface ApiEndpoint {

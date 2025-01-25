@@ -1,5 +1,5 @@
-import minimist from 'minimist';
-import path from 'path';
+import minimist from "minimist";
+import path from "path";
 
 export interface Config {
   claudeDesktopMode: boolean;
@@ -13,27 +13,25 @@ export const config = parseConfig();
 
 export function parseConfig(): Config {
   const argv = minimist(process.argv.slice(2), {
-    string: ['work-dir', 'hf-token'],
-    boolean: ['desktop-mode', 'debug'],
+    string: ["work-dir", "hf-token"],
+    boolean: ["desktop-mode", "debug"],
     default: {
-      'desktop-mode': process.env.CLAUDE_DESKTOP_MODE !== 'false',
-      'work-dir': process.env.MCP_HF_WORK_DIR || process.cwd(),
-      'hf-token': process.env.HF_TOKEN,
-      'debug': false,
+      "desktop-mode": process.env.CLAUDE_DESKTOP_MODE !== "false",
+      "work-dir": process.env.MCP_HF_WORK_DIR || process.cwd(),
+      "hf-token": process.env.HF_TOKEN,
+      debug: false,
     },
-    '--': true,
+    "--": true,
   });
 
   return {
-    claudeDesktopMode: argv['desktop-mode'],
-    workDir: path.resolve(argv['work-dir']),
-    hfToken: argv['hf-token'],
-    debug: argv['debug'],
+    claudeDesktopMode: argv["desktop-mode"],
+    workDir: path.resolve(argv["work-dir"]),
+    hfToken: argv["hf-token"],
+    debug: argv["debug"],
     spacePaths: (() => {
-      const filtered = argv._.filter(arg => arg.toString().trim().length > 0);
-      return filtered.length > 0 
-        ? filtered
-        : ["evalstate/FLUX.1-schnell"];
-    })()
+      const filtered = argv._.filter((arg) => arg.toString().trim().length > 0);
+      return filtered.length > 0 ? filtered : ["evalstate/FLUX.1-schnell"];
+    })(),
   };
 }
