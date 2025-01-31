@@ -14,7 +14,7 @@ NPM Package is `@llmindset/mcp-hfspsace`.
 
 Install a recent version of [NodeJS](https://nodejs.org/en/download) for your platform, then add the following to the `mcpServers` section of your `claude_desktop_config.json` file:
 
-```
+```json
     "mcp=hfspace": {
       "command": "npx",
       "args": [
@@ -38,7 +38,7 @@ It is recommended to override this and set a Working Directory for handling the 
 
 An example configuration for using a modern image generator, vision model and text to speech is below with a working directory set is below:
 
-```
+```json
     "mcp-hfspace": {
       "command": "npx",
       "args": [
