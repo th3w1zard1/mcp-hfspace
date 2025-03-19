@@ -101,7 +101,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         {
           type: `resource`,
           resource: {
-            uri: `/available-files`,
+            uri: `resource://mcp-hfspace/available-files`,
             mimeType: `text/markdown`,
             text: await workingDir.generateResourceTable(),
           },
