@@ -11,7 +11,7 @@ export interface Config {
 
 export const config = parseConfig();
 
-export function parseConfig(): Config {
+export function parseConfig(spacePathsArg?: string[]): Config {
   const argv = minimist(process.argv.slice(2), {
     string: ["work-dir", "hf-token"],
     boolean: ["desktop-mode", "debug"],
@@ -24,16 +24,13 @@ export function parseConfig(): Config {
     "--": true,
   });
 
+  const spacePaths = spacePathsArg && spacePathsArg.length > 0 ? spacePathsArg : argv._.filter((arg) => arg.toString().trim().length > 0);
+
   return {
     claudeDesktopMode: argv["desktop-mode"],
     workDir: path.resolve(argv["work-dir"]),
     hfToken: argv["hf-token"],
     debug: argv["debug"],
-    spacePaths: (() => {
-      const filtered = argv._.filter(
-        (arg: string) => arg.toString().trim().length > 0,
-      );
-      return filtered.length > 0 ? filtered : ["evalstate/FLUX.1-schnell"];
-    })(),
+    spacePaths: spacePaths.length > 0 ? spacePaths : ["evalstate/FLUX.1-schnell"],
   };
 }

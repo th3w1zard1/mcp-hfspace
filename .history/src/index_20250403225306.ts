@@ -2,7 +2,6 @@
 
 const AVAILABLE_RESOURCES = "Available Resources";
 const AVAILABLE_FILES = "available-files";
-const DYNAMIC_SPACE = "dynamic-space";
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { VERSION } from "./version.js";
@@ -88,28 +87,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {},
         },
       },
-      {
-        name: DYNAMIC_SPACE,
-        description:
-          "Use a Hugging Face space by specifying the space path. " +
-          "Format should be 'owner/space' or 'owner/space/endpoint'",
-        inputSchema: {
-          type: "object",
-          properties: {
-            space_path: {
-              type: "string",
-              description:
-                "The path to the Hugging Face space in the format 'owner/space' or 'owner/space/endpoint'",
-            },
-            arguments: {
-              type: "object",
-              description: "Arguments to pass to the space endpoint",
-              additionalProperties: true,
-            },
-          },
-          required: ["space_path"],
-        },
-      },
       ...Array.from(endpoints.values()).map((endpoint) =>
         endpoint.toolDefinition(),
       ),
@@ -131,58 +108,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         },
       ],
     };
-  }
-
-  if (DYNAMIC_SPACE === request.params.name) {
-    const args = request.params.arguments || {};
-    const spacePath = args.space_path as string;
-    const spaceArgs = (args.arguments || {}) as Record<string, unknown>;
-
-    if (!spacePath) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: "mcp-hfspace error: space_path is required",
-          },
-        ],
-        isError: true,
-      };
-    }
-
-    try {
-      // Create endpoint on-the-fly
-      const endpoint = await EndpointWrapper.createEndpoint(
-        spacePath,
-        workingDir,
-      );
-
-      // Modify the request to match the expected format for endpoint.call
-      const modifiedRequest = {
-        ...request,
-        params: {
-          ...request.params,
-          name: endpoint.toolDefinition().name,
-          arguments: spaceArgs,
-        },
-      };
-
-      // Call the endpoint
-      return await endpoint.call(modifiedRequest, server);
-    } catch (error) {
-      if (error instanceof Error) {
-        return {
-          content: [
-            {
-              type: `text`,
-              text: `mcp-hfspace error: ${error.message}`,
-            },
-          ],
-          isError: true,
-        };
-      }
-      throw error;
-    }
   }
 
   const endpoint = endpoints.get(request.params.name);

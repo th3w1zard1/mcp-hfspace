@@ -1,6 +1,6 @@
 {
-  "name": "@th3w1zard1/mcp-hfspace",
-  "version": "0.6.0",
+  "name": "@llmindset/mcp-hfspace",
+  "version": "0.5.1",
   "description": "MCP Server to connect to Hugging Face spaces. Simple configuration, Claude Desktop friendly.",
   "type": "module",
   "publishConfig": {
@@ -14,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/th3w1zard1/mcp-hfspace"
+    "url": "git+https://github.com/evalstate/mcp-hfspace"
   },
   "bugs": {
-    "url": "https://github.com/th3w1zard1/mcp-hfspace/issues"
+    "url": "https://github.com/evalstate/mcp-hfspace/issues"
   },
   "engines": {
     "node": ">=18",

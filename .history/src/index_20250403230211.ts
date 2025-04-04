@@ -98,8 +98,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             space_path: {
               type: "string",
-              description:
-                "The path to the Hugging Face space in the format 'owner/space' or 'owner/space/endpoint'",
+              description: "The path to the Hugging Face space in the format 'owner/space' or 'owner/space/endpoint'",
             },
             arguments: {
               type: "object",
@@ -107,7 +106,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               additionalProperties: true,
             },
           },
-          required: ["space_path"],
+          required: ["space_path"]
         },
       },
       ...Array.from(endpoints.values()).map((endpoint) =>
@@ -132,31 +131,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       ],
     };
   }
-
+  
   if (DYNAMIC_SPACE === request.params.name) {
-    const args = request.params.arguments || {};
-    const spacePath = args.space_path as string;
-    const spaceArgs = (args.arguments || {}) as Record<string, unknown>;
-
-    if (!spacePath) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: "mcp-hfspace error: space_path is required",
-          },
-        ],
-        isError: true,
-      };
-    }
-
+    const spacePath = request.params.arguments.space_path;
+    const spaceArgs = request.params.arguments.arguments || {};
+    
     try {
       // Create endpoint on-the-fly
       const endpoint = await EndpointWrapper.createEndpoint(
         spacePath,
         workingDir,
       );
-
+      
       // Modify the request to match the expected format for endpoint.call
       const modifiedRequest = {
         ...request,
@@ -166,7 +152,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           arguments: spaceArgs,
         },
       };
-
+      
       // Call the endpoint
       return await endpoint.call(modifiedRequest, server);
     } catch (error) {
